@@ -1,0 +1,68 @@
+{
+  "version": "2.0",
+  "envId": "{{env.ENV_ID}}",
+  "framework": {
+    "name": "typecho",
+    "plugins": {
+      "client": {
+        "use": "@cloudbase/framework-plugin-container",
+        "inputs": {
+          "serviceName": "typecho",
+          "servicePath": "/",
+          "uploadType": "image",
+          "imageInfo": {
+            "imageUrl": "ccr.ccs.tencentyun.com/tcb-images/typecho-tcb:1.0"
+          },
+          "containerPort": 80,
+          "customLogs": "stdout,/dev/stdout,/dev/stderr",
+          "envVariables": {
+            "MYSQL_HOST": "{{env.MYSQL_HOST}}",
+            "MYSQL_PORT": "{{env.MYSQL_PORT}}",
+            "MYSQL_USERNAME": "{{env.MYSQL_USERNAME}}",
+            "MYSQL_PASSWORD": "{{env.MYSQL_PASSWORD}}",
+            "MYSQL_DATABASE": "tcb_typecho",
+            "SITE_URL": "https://${TcbHttpServiceDefaultDomain}",
+            "TYPECHO_USERNAME": "{{env.TYPECHO_USERNAME}}",
+            "TYPECHO_PASSWORD": "{{env.TYPECHO_PASSWORD}}",
+            "TYPECHO_MAIL": "admin@mail.com",
+            "TCB_NOT_SHOW_CYNOS_DB": "${Outputs.typecho.Properties.InstanceId}"
+          },
+          "initialDelaySeconds": 10,
+          "volumeMounts": {
+            "/bitnami/meedu": "typecho-cfs"
+          }
+        }
+      }
+    },
+    "requirement": {
+      "addons": [
+        {
+          "type": "CFS",
+          "name": "typecho-cfs"
+        },
+        {
+          "type": "CynosDB",
+          "name": "typecho",
+          "envMap": {
+            "IP": "MYSQL_HOST",
+            "PORT": "MYSQL_PORT",
+            "USERNAME": "MYSQL_USERNAME",
+            "PASSWORD": "MYSQL_PASSWORD"
+          }
+        }
+      ],
+      "environment": {
+        "TYPECHO_USERNAME": {
+          "description": "管理控制台账号",
+          "required": true,
+          "default": "admin"
+        },
+        "TYPECHO_PASSWORD": {
+          "description": "初始管理控制台密码",
+          "required": true,
+          "default": "typecho@123"
+        }
+      }
+    }
+  }
+}
