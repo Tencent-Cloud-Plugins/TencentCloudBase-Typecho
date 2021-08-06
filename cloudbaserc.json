@@ -29,7 +29,7 @@
           },
           "initialDelaySeconds": 10,
           "volumeMounts": {
-            "/bitnami/meedu": "typecho-cfs"
+            "/bitnami/typecho": "typecho-cfs"
           }
         }
       }
